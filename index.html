@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RUN FIT - حاسبة الجري</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Tahoma', sans-serif;
+      direction: rtl;
+      background: #f4f7fb;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      background: #007bff;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      height: 85vh;
+      background: linear-gradient(135deg, #0084ff, #00c6ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 20px;
+    }
+
+    .hero-content {
+      background: rgba(0, 0, 0, 0.45);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 85%;
+    }
+
+    .btn {
+      background: #00c0ff;
+      padding: 12px 25px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: white;
+      margin-top: 15px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* CALCULATOR BOX */
+    .calculator-box {
+      background: white;
+      width: 360px;
+      margin: 40px auto;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 17px;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eaf7ff;
+      border-right: 4px solid #0099ff;
+      border-radius: 8px;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #007bff;
+      color: white;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">RUN FIT</div>
+    <ul>
+      <li><a href="#hero">الرئيسية</a></li>
+      <li><a href="#calculator">حاسبة الجري</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header class="hero" id="hero">
+    <div class="hero-content">
+      <h1>احسب مسافة الجري لحرق السعرات بسهولة</h1>
+      <p>أدخل وزنك والسعرات المراد حرقها وسرعة الجري لمعرفة المسافة والوقت المطلوبين.</p>
+      <a href="#calculator" class="btn">ابدأ الآن</a>
+    </div>
+  </header>
+
+  <!-- CALCULATOR SECTION -->
+  <div class="calculator-box" id="calculator">
+    <h2>حاسبة الجري لحرق السعرات</h2>
+
+    <div class="input-group">
+      <label>عدد السعرات المراد حرقها:</label>
+      <input type="number" id="calInput" placeholder="مثال: 300">
+    </div>
+
+    <div class="input-group">
+      <label>وزنك (بالكيلوغرام):</label>
+      <input type="number" id="weightInput" placeholder="مثال: 70">
+    </div>
+
+    <div class="input-group">
+      <label>سرعة الجري (كم/ساعة):</label>
+      <input type="number" id="speedInput" placeholder="مثال: 8">
+    </div>
+
+    <button onclick="calculate()">احسب النتائج</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <footer>
+    © 2025 RUN FIT — جميع الحقوق محفوظة
+  </footer>
+
+  <script>
+    function calculate() {
+      let calories = parseFloat(document.getElementById("calInput").value);
+      let weight = parseFloat(document.getElementById("weightInput").value);
+      let speed = parseFloat(document.getElementById("speedInput").value);
+
+      if (calories <= 0 || weight <= 0 || speed <= 0) {
+        document.getElementById("result").innerHTML = "الرجاء إدخال القيم بشكل صحيح.";
+        return;
+      }
+
+      // 🔹 السعرات المحروقة لكل كم = الوزن
+      let calPerKm = weight;
+
+      // 🔹 المسافة المطلوبة
+      let distance = calories / calPerKm;
+
+      // 🔹 الزمن المطلوب = المسافة ÷ السرعة
+      let timeHours = distance / speed;
+      let minutes = (timeHours * 60).toFixed(1);
+
+      document.getElementById("result").innerHTML =
+        "✔ المسافة المطلوبة: <b>" + distance.toFixed(2) + " كم</b><br>" +
+        "✔ الزمن المطلوب: <b>" + minutes + " دقيقة</b><br>" +
+        "✔ السعرات المحروقة لكل كيلومتر: <b>" + calPerKm + "</b>";
+    }
+  </script>
+
+</body>
+</html>
