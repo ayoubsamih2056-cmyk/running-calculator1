@@ -87,6 +87,17 @@
     border-radius:12px;
     box-shadow:0 3px 10px rgba(0,0,0,0.1);
   }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    text-align:center;
+  }
+  th,td{
+    padding:12px;
+    border:1px solid #bbb;
+  }
+  th{background:#0a7cff;color:white;}
   footer{
     margin-top:50px;
     background:#0a7cff;
@@ -140,6 +151,21 @@
 
   <div id="result" class="result-box"></div>
   <div id="mealResult" class="meal-box"></div>
+
+  <!-- جدول المغذيات الموصى بها -->
+  <div id="nutritionTable">
+    <h2>📊 جدول المغذيات اليومية الموصى بها</h2>
+    <table id="nutriTable">
+      <thead>
+        <tr><th>المغذيات</th><th>الكمية اليومية الموصى بها</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>البروتين (غ)</td><td id="proteinRec">-</td></tr>
+        <tr><td>الكربوهيدرات (غ)</td><td id="carbRec">-</td></tr>
+        <tr><td>الدهون (غ)</td><td id="fatRec">-</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div class="container" id="history">
@@ -197,12 +223,33 @@ function calculate() {
     ? `<span style="color:green">🍽 لازلت تحتاج إلى <b>${remaining}</b> سعرة</span>`
     : `<span style="color:red">🔥 لقد تجاوزت هدفك بـ <b>${Math.abs(remaining)}</b> سعرة</span>`;
 
+  // تحديث جدول المغذيات
+  updateNutritionTable();
+
   // حفظ التاريخ
   runHistory.push({distance: distance.toFixed(2),calories,speed,date:new Date().toLocaleString()});
   localStorage.setItem("runHistory", JSON.stringify(runHistory));
   updateHistory();
   drawChart();
 }
+
+// تحديث جدول المغذيات
+function updateNutritionTable() {
+  let weight = +document.getElementById("weight").value;
+  if (!weight) return;
+  let protein = Math.round(weight * 1.5);
+  let carbs = Math.round(weight * 4);
+  let fat = Math.round(weight * 0.9);
+
+  document.getElementById("proteinRec").innerText = protein;
+  document.getElementById("carbRec").innerText = carbs;
+  document.getElementById("fatRec").innerText = fat;
+}
+
+// استدعاء التحديث عند تغيير البيانات
+document.getElementById("age").addEventListener("input", updateNutritionTable);
+document.getElementById("weight").addEventListener("input", updateNutritionTable);
+document.getElementById("height").addEventListener("input", updateNutritionTable);
 
 function updateHistory(){
   let html="";
