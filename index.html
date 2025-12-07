@@ -1,195 +1,137 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RUN FIT - حاسبة الجري</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Tahoma', sans-serif;
-      direction: rtl;
-      background: #f4f7fb;
-    }
-
-    /* NAVBAR */
-    .navbar {
-      background: #007bff;
-      color: white;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .navbar ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    /* HERO SECTION */
-    .hero {
-      height: 85vh;
-      background: linear-gradient(135deg, #0084ff, #00c6ff);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: white;
-      padding: 20px;
-    }
-
-    .hero-content {
-      background: rgba(0, 0, 0, 0.45);
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 85%;
-    }
-
-    .btn {
-      background: #00c0ff;
-      padding: 12px 25px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: white;
-      margin-top: 15px;
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    /* CALCULATOR BOX */
-    .calculator-box {
-      background: white;
-      width: 360px;
-      margin: 40px auto;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    .input-group {
-      margin-bottom: 15px;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #007bff;
-      border: none;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 17px;
-    }
-
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #eaf7ff;
-      border-right: 4px solid #0099ff;
-      border-radius: 8px;
-    }
-
-    /* FOOTER */
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #007bff;
-      color: white;
-      margin-top: 50px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RUN FIT - النسخة الاحترافية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+ body {margin:0;font-family:"Cairo",sans-serif;direction:rtl;
+ background-image:url('https://images.unsplash.com/photo-1599058900985-fd9f93e9f9f1');
+ background-size:cover;background-attachment:fixed;background-position:center;}
+ .navbar{background:#0a7cff;padding:18px 40px;color:white;display:flex;justify-content:space-between;font-size:20px;font-weight:700;}
+ .navbar ul{display:flex;list-style:none;gap:25px;}
+ .navbar a{color:white;text-decoration:none;font-size:18px;}
+ .hero{height:75vh;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;justify-content:center;align-items:center;text-align:center;color:white;padding:30px;}
+ .hero-content{background:rgba(0,0,0,0.45);padding:40px;border-radius:15px;}
+ .container{max-width:700px;margin:40px auto;background:white;padding:30px;border-radius:16px;box-shadow:0 5px 18px rgba(0,0,0,0.12);}
+ input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #bbb;margin:8px 0;}
+ button{width:100%;padding:15px;background:#0a7cff;color:white;border:none;border-radius:12px;font-size:18px;cursor:pointer;}
+ .result-box{margin-top:20px;background:#e9f4ff;border-right:6px solid #008cff;padding:20px;border-radius:12px;}
+ .history-box{margin-top:40px;padding:20px;background:#fff;border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,0.1);}
+ footer{margin-top:50px;background:#0a7cff;color:white;padding:20px;text-align:center;}
+ .meal-box{margin-top:20px;background:#fff5d7;border-right:6px solid #ffbb00;padding:20px;border-radius:12px;}
+</style>
 </head>
-
 <body>
+<nav class="navbar">
+ <div>RUN FIT</div>
+ <ul>
+   <li><a href="#calc">الحاسبة</a></li>
+   <li><a href="#history">السجل</a></li>
+ </ul>
+</nav>
+<header class="hero">
+ <div class="hero-content">
+   <h1>أفضل حاسبة للجري و الحمية</h1>
+   <p>احسب نشاطك واحصل على وجبات للوصول لهدفك من السعرات.</p>
+   <a href="#calc" class="btn">ابدأ الآن</a>
+ </div>
+</header>
+<div class="container" id="calc">
+ <h2>حاسبة الجري + نظام الوجبات</h2>
+ <label>العمر:</label><input type="number" id="age" />
+ <label>الوزن (كغ):</label><input type="number" id="weight" />
+ <label>الطول (سم):</label><input type="number" id="height" />
+ <label>الجنس:</label>
+ <select id="gender">
+   <option value="male">ذكر</option>
+   <option value="female">أنثى</option>
+ </select>
+ <label>السعرات المراد حرقها اليوم:</label><input type="number" id="cal" />
+ <label>سرعة الجري (كم/ساعة):</label><input type="number" id="speed" />
 
-  <nav class="navbar">
-    <div class="logo">RUN FIT</div>
-    <ul>
-      <li><a href="#hero">الرئيسية</a></li>
-      <li><a href="#calculator">حاسبة الجري</a></li>
-    </ul>
-  </nav>
+ <label>اختر وجباتك لليوم:</label>
+ <select id="mealPlan" multiple size="6">
+   <option value="350">فطور: شوفان + موز + حليب (350 سعرة)</option>
+   <option value="500">غداء: دجاج مشوي + أرز (500 سعرة)</option>
+   <option value="450">غداء: سمك + سلطة (450 سعرة)</option>
+   <option value="300">عشاء: تونة + خبز كامل (300 سعرة)</option>
+   <option value="200">سناك: لوز + تفاحة (200 سعرة)</option>
+   <option value="150">سناك: زبادي (150 سعرة)</option>
+ </select>
 
-  <!-- HERO SECTION -->
-  <header class="hero" id="hero">
-    <div class="hero-content">
-      <h1>احسب مسافة الجري لحرق السعرات بسهولة</h1>
-      <p>أدخل وزنك والسعرات المراد حرقها وسرعة الجري لمعرفة المسافة والوقت المطلوبين.</p>
-      <a href="#calculator" class="btn">ابدأ الآن</a>
-    </div>
-  </header>
+ <button onclick="calculate()">احسب الآن</button>
 
-  <!-- CALCULATOR SECTION -->
-  <div class="calculator-box" id="calculator">
-    <h2>حاسبة الجري لحرق السعرات</h2>
+ <div id="result" class="result-box"></div>
+ <div id="mealResult" class="meal-box"></div>
+</div>
+<div class="container" id="history">
+ <h2>📌 سجل تدريباتك</h2>
+ <canvas id="chart" height="120"></canvas>
+ <div id="historyBox" class="history-box"></div>
+</div>
+<footer>© 2025 RUN FIT — النسخة الاحترافية</footer>
+<script>
+let runHistory = JSON.parse(localStorage.getItem("runHistory") || "[]");
+let chart;
 
-    <div class="input-group">
-      <label>عدد السعرات المراد حرقها:</label>
-      <input type="number" id="calInput" placeholder="مثال: 300">
-    </div>
+function calculate() {
+ let age = +document.getElementById("age").value;
+ let weight = +document.getElementById("weight").value;
+ let height = +document.getElementById("height").value;
+ let calories = +document.getElementById("cal").value;
+ let speed = +document.getElementById("speed").value;
+ let meals = Array.from(document.getElementById("mealPlan").selectedOptions).map(o=>+o.value);
 
-    <div class="input-group">
-      <label>وزنك (بالكيلوغرام):</label>
-      <input type="number" id="weightInput" placeholder="مثال: 70">
-    </div>
+ if (!age || !weight || !height || !calories || !speed) {
+   document.getElementById("result").innerHTML = "⚠ الرجاء ملء كل البيانات.";
+   return;
+ }
 
-    <div class="input-group">
-      <label>سرعة الجري (كم/ساعة):</label>
-      <input type="number" id="speedInput" placeholder="مثال: 8">
-    </div>
+ let pace = 60 / speed;
+ let distance = calories / weight;
+ let timeMinutes = (distance / speed) * 60;
+ let vo2 = (speed * 3.5).toFixed(1);
 
-    <button onclick="calculate()">احسب النتائج</button>
+ // meals
+ let mealsTotal = meals.reduce((a,b)=>a+b,0);
+ let remaining = calories - mealsTotal;
 
-    <div class="result" id="result"></div>
-  </div>
+ document.getElementById("result").innerHTML = `
+   ✔ المسافة المطلوبة: <b>${distance.toFixed(2)} كم</b><br>
+   ✔ الزمن المطلوب: <b>${timeMinutes.toFixed(1)} دقيقة</b><br>
+   ✔ الـ Pace: <b>${pace.toFixed(2)} دقيقة/كم</b><br>
+   ✔ VO₂ Max: <b>${vo2}</b><br>
+   ✔ مجموع سعرات وجباتك: <b>${mealsTotal}</b>
+ `;
 
-  <footer>
-    © 2025 RUN FIT — جميع الحقوق محفوظة
-  </footer>
+ document.getElementById("mealResult").innerHTML = remaining > 0
+   ? `🍽 لازلت تحتاج إلى <b>${remaining} سعرة</b> لحرق الهدف اليومي.`
+   : `🔥 لقد تجاوزت هدفك بـ <b>${Math.abs(remaining)} سعرة</b>. قلل وجبة أو زد التمارين.`;
 
-  <script>
-    function calculate() {
-      let calories = parseFloat(document.getElementById("calInput").value);
-      let weight = parseFloat(document.getElementById("weightInput").value);
-      let speed = parseFloat(document.getElementById("speedInput").value);
+ runHistory.push({distance: distance.toFixed(2),calories,speed,date:new Date().toLocaleString()});
+ localStorage.setItem("runHistory", JSON.stringify(runHistory));
+ updateHistory(); drawChart();
+}
 
-      if (calories <= 0 || weight <= 0 || speed <= 0) {
-        document.getElementById("result").innerHTML = "الرجاء إدخال القيم بشكل صحيح.";
-        return;
-      }
+function updateHistory(){
+ let html="";
+ runHistory.forEach(e=>{
+   html+=`<p>🏃 مسافة: <b>${e.distance} كم</b> — 🔥 سعرات: <b>${e.calories}</b> — ⚡ سرعة: <b>${e.speed}</b> — 📅 ${e.date}</p><hr>`;
+ });
+ document.getElementById("historyBox").innerHTML = html;
+}
 
-      // 🔹 السعرات المحروقة لكل كم = الوزن
-      let calPerKm = weight;
+function drawChart(){
+ let ctx = document.getElementById("chart");
+ if(chart) chart.destroy();
+ chart = new Chart(ctx,{type:"line",data:{labels:runHistory.map(e=>e.date),datasets:[{label:"المسافة (كم)",data:runHistory.map(e=>e.distance),borderWidth:3}]},options:{scales:{y:{beginAtZero:true}}}});
+}
 
-      // 🔹 المسافة المطلوبة
-      let distance = calories / calPerKm;
-
-      // 🔹 الزمن المطلوب = المسافة ÷ السرعة
-      let timeHours = distance / speed;
-      let minutes = (timeHours * 60).toFixed(1);
-
-      document.getElementById("result").innerHTML =
-        "✔ المسافة المطلوبة: <b>" + distance.toFixed(2) + " كم</b><br>" +
-        "✔ الزمن المطلوب: <b>" + minutes + " دقيقة</b><br>" +
-        "✔ السعرات المحروقة لكل كيلومتر: <b>" + calPerKm + "</b>";
-    }
-  </script>
-
+updateHistory();
+drawChart();
+</script>
 </body>
 </html>
