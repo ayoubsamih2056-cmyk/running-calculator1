@@ -1,283 +1,396 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>RUN FIT - النسخة الاحترافية</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-  body {
-    margin:0;
-    font-family:"Cairo",sans-serif;
-    direction:rtl;
-    background-image:url('https://images.unsplash.com/photo-1599058900985-fd9f93e9f9f1');
-    background-size:cover;
-    background-attachment:fixed;
-    background-position:center;
-    color:#333;
-  }
-  .navbar{
-    background:#0a7cff;
-    padding:18px 40px;
-    color:white;
-    display:flex;
-    justify-content:space-between;
-    font-size:20px;
-    font-weight:700;
-  }
-  .navbar ul{display:flex;list-style:none;gap:25px;}
-  .navbar a{color:white;text-decoration:none;font-size:18px;}
-  .hero{
-    height:75vh;
-    background:linear-gradient(135deg,#0084ff,#00c6ff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    color:white;
-    padding:30px;
-  }
-  .hero-content{
-    background:rgba(0,0,0,0.45);
-    padding:40px;
-    border-radius:15px;
-  }
-  .container{
-    max-width:700px;
-    margin:40px auto;
-    background:white;
-    padding:30px;
-    border-radius:16px;
-    box-shadow:0 5px 18px rgba(0,0,0,0.12);
-  }
-  input,select{
-    width:100%;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid #bbb;
-    margin:8px 0;
-    font-size:16px;
-  }
-  button{
-    width:100%;
-    padding:15px;
-    background:#0a7cff;
-    color:white;
-    border:none;
-    border-radius:12px;
-    font-size:18px;
-    cursor:pointer;
-    margin-top:10px;
-    transition:0.3s;
-  }
-  button:hover{background:#006fcc;}
-  .result-box,.meal-box{
-    margin-top:20px;
-    padding:20px;
-    border-radius:12px;
-    font-size:16px;
-  }
-  .result-box{background:#e9f4ff;border-right:6px solid #008cff;}
-  .meal-box{background:#fff5d7;border-right:6px solid #ffbb00;}
-  .history-box{
-    margin-top:20px;
-    padding:20px;
-    background:#fff;
-    border-radius:12px;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
-  }
-  table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-    text-align:center;
-  }
-  th,td{
-    padding:12px;
-    border:1px solid #bbb;
-  }
-  th{background:#0a7cff;color:white;}
-  footer{
-    margin-top:50px;
-    background:#0a7cff;
-    color:white;
-    padding:20px;
-    text-align:center;
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>رفيقي في الحمية</title>
+  <style>
+    /* ====== Reset & base ====== */
+    *{box-sizing:border-box;font-family:system-ui, 'Segoe UI', Roboto, 'Noto Sans Arabic', Tahoma, sans-serif}
+    html,body{height:100%;margin:0;background:#0f1724;color:#e6eef8}
+    a{color:inherit}
+
+    /* ====== Background (sporty, professional) ====== */
+    body{
+      background-image:
+        linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.9)),
+        url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=60');
+      background-size:cover;background-position:center;backdrop-filter:blur(0.5px);
+      -webkit-font-smoothing:antialiased;
+      padding:28px;
+    }
+
+    /* ====== Card layout ====== */
+    .container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:20px}
+    header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;gap:14px;align-items:center}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#10b981,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:20px;box-shadow:0 6px 22px rgba(2,6,23,0.6)}
+    h1{font-size:20px;margin:0}
+    p.lead{opacity:0.9;margin:0;font-size:13px}
+
+    /* ====== Panels ====== */
+    .panel{background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));padding:18px;border-radius:14px;box-shadow:0 6px 30px rgba(2,6,23,0.6);}
+    .panel h2{margin:0 0 12px 0;font-size:16px}
+
+    /* Form grid */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    input, select{width:100%;padding:10px;border-radius:10px;border:0;background:rgba(255,255,255,0.03);color:inherit}
+    input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+    /* Buttons */
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:0;background:linear-gradient(90deg,#06b6d4,#10b981);color:#002033;font-weight:700;cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit}
+
+    /* Results */
+    .result{display:flex;flex-direction:column;gap:8px}
+    .big{font-size:28px;font-weight:700}
+    .muted{opacity:0.85;font-size:13px}
+
+    /* Nutrition table */
+    table{width:100%;border-collapse:collapse;margin-top:8px}
+    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:center}
+    th{font-size:13px;opacity:0.9}
+
+    /* Meal planner */
+    .meals{display:grid;grid-template-columns:1fr;gap:8px}
+    .meal{display:flex;align-items:center;gap:8px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.02)}
+    .meal select{flex:1}
+
+    /* Running calc */
+    .small{font-size:13px}
+
+    /* Right column summary */
+    .summary{position:sticky;top:28px;display:flex;flex-direction:column;gap:12px}
+
+    /* Responsive */
+    @media (max-width:980px){.container{grid-template-columns:1fr;}.logo{width:48px;height:48px}.summary{position:static}}
+
+    /* Footer */
+    footer{grid-column:1/-1;margin-top:10px;text-align:center;font-size:13px;opacity:0.8}
+
+    /* tiny helper */
+    .flex{display:flex;gap:10px;align-items:center}
+    .muted-2{opacity:0.75;font-size:12px}
+
+  </style>
 </head>
 <body>
-<nav class="navbar">
-  <div>RUN FIT</div>
-  <ul>
-    <li><a href="#calc">الحاسبة</a></li>
-    <li><a href="#history">السجل</a></li>
-  </ul>
-</nav>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">رف</div>
+        <div>
+          <h1>رفيقي في الحمية</h1>
+          <p class="lead">حاسبة سعرات، جدول مغذيات وخطة وجبات بسيطة قابلة للتعديل</p>
+        </div>
+      </div>
+      <div class="flex">
+        <button class="btn" id="saveProfile">حفظ (محلي)</button>
+        <button class="btn btn-ghost" id="resetBtn">إعادة ضبط</button>
+      </div>
+    </header>
 
-<header class="hero">
-  <div class="hero-content">
-    <h1>أفضل حاسبة للجري و الحمية</h1>
-    <p>احسب نشاطك واحصل على وجبات للوصول لهدفك من السعرات والمغذيات.</p>
-    <a href="#calc" style="padding:10px 20px;background:#ffbb00;color:#333;border-radius:10px;text-decoration:none;font-weight:700;">ابدأ الآن</a>
+    <!-- main inputs -->
+    <section class="panel">
+      <h2>المعلومات الأساسية</h2>
+      <div class="form-grid">
+        <div>
+          <label>العمر (سنة)</label>
+          <input id="age" type="number" min="10" max="120" value="30">
+        </div>
+        <div>
+          <label>الوزن (كجم)</label>
+          <input id="weight" type="number" min="20" max="300" value="70">
+        </div>
+        <div>
+          <label>الطول (سم)</label>
+          <input id="height" type="number" min="80" max="260" value="175">
+        </div>
+        <div>
+          <label>الجنس</label>
+          <select id="sex">
+            <option value="male">ذكر</option>
+            <option value="female">أنثى</option>
+          </select>
+        </div>
+
+        <div>
+          <label>مستوى النشاط</label>
+          <select id="activity">
+            <option value="1.2">قليل الحركة</option>
+            <option value="1.375">معتدل</option>
+            <option value="1.55" selected>نشاط أساسي/تمارين 3-5 أيام</option>
+            <option value="1.725">نشاط عالي</option>
+            <option value="1.9">نشيط جدًا</option>
+          </select>
+        </div>
+        <div>
+          <label>الهدف</label>
+          <select id="goal">
+            <option value="maintain">الحفاظ على الوزن</option>
+            <option value="lose">فقدان وزن (خسارة تدريجية)</option>
+            <option value="lose-fast">فقدان أسرع (حذر)</option>
+            <option value="gain">زيادة كتلة عضلية</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+        <button class="btn" id="calcBtn">احسب الآن</button>
+        <div class="muted-2">يمكنك تعديل خطة الوجبات بالأسفل وسيتم تعديل المجموع تلقائياً.</div>
+      </div>
+
+      <div style="margin-top:14px" id="results" class="result" aria-live="polite">
+        <div><span class="muted">السعرات اليومية الموصى بها:</span> <span id="calorieVal" class="big">—</span> <span class="muted">كيلو سعرة/يوم</span></div>
+        <div><span class="muted">الـBMR (معدل الأيض الأساسي):</span> <span id="bmrVal">—</span></div>
+        <div><span class="muted">معدل النشاط (TDEE):</span> <span id="tdeeVal">—</span></div>
+      </div>
+
+      <hr style="border:0;border-top:1px solid rgba(255,255,255,0.03);margin:16px 0">
+
+      <h2>حاسبة الجري (تقديري)</h2>
+      <div class="form-grid">
+        <div>
+          <label>المسافة (كم)</label>
+          <input id="runDistance" type="number" min="0" step="0.1" value="5">
+        </div>
+        <div>
+          <label>السرعة/وتيرة (كم/س) (اختياري)</label>
+          <input id="runSpeed" type="number" min="0" step="0.1" placeholder="مثال: 10">
+        </div>
+      </div>
+      <div style="margin-top:12px" class="flex small">
+        <button class="btn btn-ghost" id="calcRun">احسب حرق الجري</button>
+        <div class="muted-2">سعرات محروقة تقديري: <span id="runCalories">—</span> كيلو سعرة</div>
+      </div>
+
+    </section>
+
+    <!-- right column summary & meal planner -->
+    <aside class="summary">
+      <div class="panel">
+        <h2>تفصيل المغذيات</h2>
+        <div class="muted">المقادير بالجرام مقدرة حسب الهدف والوزن</div>
+        <table>
+          <thead>
+            <tr><th>بروتين (غ)</th><th>كربوهيدرات (غ)</th><th>دهون (غ)</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="proteinVal">—</td>
+              <td id="carbVal">—</td>
+              <td id="fatVal">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>مخطط الوجبات اليومية</h2>
+        <div class="meals" id="mealsContainer">
+          <!-- meals will be injected here -->
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn" id="addMeal">إضافة وجبة</button>
+          <button class="btn btn-ghost" id="autoFillMeals">اقترح لي وجبات</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>ملخص سريع</h2>
+        <div class="muted">السعرات بعد تمرين الجري (إن وُجد):</div>
+        <div style="font-size:18px;font-weight:700" id="calAfterRun">—</div>
+        <div style="margin-top:8px" class="muted-2">اضغط "حفظ" ليتم تخزين ملفك محليًا في المتصفح.</div>
+      </div>
+    </aside>
+
+    <footer>تم الإنشاء بواسطة مساعدك — رفيقي في الحمية · نسخة تجريبية</footer>
   </div>
-</header>
 
-<div class="container" id="calc">
-  <h2>حاسبة الجري + نظام الوجبات والمغذيات</h2>
-  <label>العمر:</label><input type="number" id="age" placeholder="أدخل عمرك"/>
-  <label>الوزن (كغ):</label><input type="number" id="weight" placeholder="وزنك"/>
-  <label>الطول (سم):</label><input type="number" id="height" placeholder="طولك"/>
-  <label>الجنس:</label>
-  <select id="gender">
-    <option value="male">ذكر</option>
-    <option value="female">أنثى</option>
-  </select>
-  <label>السعرات المراد حرقها اليوم:</label><input type="number" id="cal" placeholder="عدد السعرات"/>
-  <label>سرعة الجري (كم/ساعة):</label><input type="number" id="speed" placeholder="سرعة الجري"/>
+  <script>
+    // ====== Helper functions ======
+    function $(id){return document.getElementById(id)}
+    function round(n,dec=0){return Math.round(n*Math.pow(10,dec))/Math.pow(10,dec)}
 
-  <label>اختر وجباتك لليوم:</label>
-  <select id="mealPlan" multiple size="6">
-    <option value="350" data-protein="15" data-carb="45" data-fat="10">فطور: شوفان + موز + حليب (350 سعرة)</option>
-    <option value="500" data-protein="35" data-carb="50" data-fat="12">غداء: دجاج مشوي + أرز (500 سعرة)</option>
-    <option value="450" data-protein="30" data-carb="40" data-fat="15">غداء: سمك + سلطة (450 سعرة)</option>
-    <option value="300" data-protein="25" data-carb="20" data-fat="8">عشاء: تونة + خبز كامل (300 سعرة)</option>
-    <option value="200" data-protein="6" data-carb="25" data-fat="10">سناك: لوز + تفاحة (200 سعرة)</option>
-    <option value="150" data-protein="8" data-carb="12" data-fat="5">سناك: زبادي (150 سعرة)</option>
-  </select>
+    // ====== Core calculations ======
+    function calcBMR(sex,weight,height,age){
+      // Mifflin-St Jeor
+      if(sex==='male') return 10*weight + 6.25*height - 5*age + 5;
+      return 10*weight + 6.25*height - 5*age - 161;
+    }
 
-  <button onclick="calculate()">احسب الآن</button>
+    function calcTDEE(bmr,activity){
+      return bmr * activity;
+    }
 
-  <div id="result" class="result-box"></div>
-  <div id="mealResult" class="meal-box"></div>
+    function adjustForGoal(tdee,goal){
+      if(goal==='maintain') return tdee;
+      if(goal==='lose') return tdee - Math.min(650, tdee*0.15); // moderate
+      if(goal==='lose-fast') return tdee - Math.min(1000, tdee*0.23); // aggressive
+      if(goal==='gain') return tdee + Math.min(700, tdee*0.18);
+      return tdee;
+    }
 
-  <!-- جدول المغذيات الموصى بها -->
-  <div id="nutritionTable">
-    <h2>📊 جدول المغذيات اليومية الموصى بها</h2>
-    <table id="nutriTable">
-      <thead>
-        <tr><th>المغذيات</th><th>الكمية اليومية الموصى بها</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>البروتين (غ)</td><td id="proteinRec">-</td></tr>
-        <tr><td>الكربوهيدرات (غ)</td><td id="carbRec">-</td></tr>
-        <tr><td>الدهون (غ)</td><td id="fatRec">-</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+    function nutritionSplit(calories,weight,goal){
+      // Provide grams: protein target depends on goal and weight
+      // protein: 1.2-2.2 g/kg depending on goal
+      let proteinPerKg = (goal==='gain')?1.8: (goal==='lose-fast')?2.0 : (goal==='lose')?1.6 : 1.4;
+      let proteinG = Math.round(proteinPerKg * weight);
+      let proteinCals = proteinG * 4;
 
-<div class="container" id="history">
-  <h2>📌 سجل تدريباتك</h2>
-  <canvas id="chart" height="140"></canvas>
-  <div id="historyBox" class="history-box"></div>
-</div>
+      // fat: 20-30% of cals
+      let fatPct = (goal==='gain')?0.25 : (goal==='lose-fast')?0.22 : 0.24;
+      let fatCals = calories * fatPct;
+      let fatG = Math.round(fatCals / 9);
 
-<footer>© 2025 RUN FIT — النسخة الاحترافية</footer>
+      // remaining to carbs
+      let carbsCals = Math.max(0, calories - (proteinCals + fatCals));
+      let carbsG = Math.round(carbsCals / 4);
 
-<script>
-let runHistory = JSON.parse(localStorage.getItem("runHistory") || "[]");
-let chart;
+      return {proteinG,carbsG,fatG};
+    }
 
-function calculate() {
-  let age = +document.getElementById("age").value;
-  let weight = +document.getElementById("weight").value;
-  let height = +document.getElementById("height").value;
-  let calories = +document.getElementById("cal").value;
-  let speed = +document.getElementById("speed").value;
-  let mealsOpts = Array.from(document.getElementById("mealPlan").selectedOptions);
+    function estimateRunCalories(weightKg, distanceKm){
+      // Simple estimate: 1 kcal/kg/km ~ Running ~1.0 kcal per kg per km
+      return round(weightKg * distanceKm * 1.03);
+    }
 
-  if (!age || !weight || !height || !calories || !speed) {
-    document.getElementById("result").innerHTML = "⚠ الرجاء ملء كل البيانات.";
-    return;
-  }
+    // ====== UI wiring ======
+    function populateMealsDefault(){
+      const container = $('mealsContainer'); container.innerHTML='';
+      const defaults = ['إفطار: شوفان + فاكهة','سناك صباحي: زبادي','غداء: صدر دجاج + أرز + سلطة','سناك عصير/فواكه','عشاء: سمك أو سلطة مع بروتين'];
+      defaults.forEach((text,i)=>{
+        addMealNode(text);
+      });
+    }
 
-  // حساب السعرات المحروقة بدقة أكبر (MET متوسط 8 للجري)
-  let MET = 8;
-  let timeHrs = calories / (MET * weight);
-  let distance = speed * timeHrs;
-  let timeMinutes = timeHrs * 60;
-  let pace = 60 / speed;
-  let vo2 = (speed * 3.5).toFixed(1);
+    function addMealNode(text='وجبة جديدة'){
+      const container = $('mealsContainer');
+      const div = document.createElement('div'); div.className='meal';
+      const select = document.createElement('select');
+      const opts = ['لا شيء','شوفان + فاكهة','بيضتين + خبز أسمر','زبادي يوناني + عسل','صدر دجاج مشوي + أرز','سمك مشوي + سلطة','سلطة مع تونا','خضار مطهوة + فاصوليا','عصير طبيعي + مكسرات'];
+      opts.forEach(o=>{const op=document.createElement('option');op.textContent=o;op.value=o;select.appendChild(op)});
+      // create a custom option prefilled if text not in opts
+      if(!opts.includes(text)){
+        const op=document.createElement('option');op.textContent=text;op.value=text;op.selected=true;select.appendChild(op);
+      } else { for(let i=0;i<select.options.length;i++){if(select.options[i].value===text)select.selectedIndex=i} }
 
-  // حساب المغذيات
-  let totalProtein = mealsOpts.reduce((a,o)=>a+Number(o.dataset.protein),0);
-  let totalCarb = mealsOpts.reduce((a,o)=>a+Number(o.dataset.carb),0);
-  let totalFat = mealsOpts.reduce((a,o)=>a+Number(o.dataset.fat),0);
-  let mealsTotal = mealsOpts.reduce((a,o)=>a+Number(o.value),0);
-  let remaining = calories - mealsTotal;
+      const kcalBox = document.createElement('input'); kcalBox.type='number'; kcalBox.min=0; kcalBox.value=round( Math.random()*400 + 250 ); kcalBox.style.width='96px'; kcalBox.title='سعرات تقريبية للوجبة';
+      const remove = document.createElement('button'); remove.className='btn btn-ghost'; remove.textContent='حذف'; remove.addEventListener('click',()=>{div.remove();updateSummary()});
 
-  document.getElementById("result").innerHTML = `
-    ✔ المسافة المطلوبة: <b>${distance.toFixed(2)} كم</b><br>
-    ✔ الزمن المطلوب: <b>${timeMinutes.toFixed(1)} دقيقة</b><br>
-    ✔ الـ Pace: <b>${pace.toFixed(2)} دقيقة/كم</b><br>
-    ✔ VO₂ Max: <b>${vo2}</b><br>
-    ✔ مجموع السعرات وجباتك: <b>${mealsTotal}</b><br>
-    ✔ البروتين الكلي: <b>${totalProtein} غ</b><br>
-    ✔ الكربوهيدرات الكلية: <b>${totalCarb} غ</b><br>
-    ✔ الدهون الكلية: <b>${totalFat} غ</b>
-  `;
+      select.addEventListener('change',()=>{updateSummary()});
+      kcalBox.addEventListener('input',()=>{updateSummary()});
 
-  document.getElementById("mealResult").innerHTML = remaining > 0
-    ? `<span style="color:green">🍽 لازلت تحتاج إلى <b>${remaining}</b> سعرة</span>`
-    : `<span style="color:red">🔥 لقد تجاوزت هدفك بـ <b>${Math.abs(remaining)}</b> سعرة</span>`;
+      div.appendChild(select); div.appendChild(kcalBox); div.appendChild(remove);
+      container.appendChild(div);
+      updateSummary();
+    }
 
-  // تحديث جدول المغذيات
-  updateNutritionTable();
+    function autoFillMeals(){
+      // Simple auto-fill distributes calories across 5 meals
+      const cal = Number($('calorieVal').textContent.replace(/[^\d.-]/g,'')) || 2000;
+      const breakfast = Math.round(cal*0.25);
+      const lunch = Math.round(cal*0.30);
+      const dinner = Math.round(cal*0.25);
+      const snacks = Math.round((cal - (breakfast+lunch+dinner))/2);
+      $('mealsContainer').innerHTML='';
+      addMealNode('إفطار: شوفان + فاكهة'); $('mealsContainer').children[0].querySelector('input').value=breakfast;
+      addMealNode('سناك صباحي: زبادي'); $('mealsContainer').children[1].querySelector('input').value=snacks;
+      addMealNode('غداء: صدر دجاج + أرز + سلطة'); $('mealsContainer').children[2].querySelector('input').value=lunch;
+      addMealNode('سناك عصير/مكسرات'); $('mealsContainer').children[3].querySelector('input').value=snacks;
+      addMealNode('عشاء: سمك أو سلطة مع بروتين'); $('mealsContainer').children[4].querySelector('input').value=dinner;
+      updateSummary();
+    }
 
-  // حفظ التاريخ
-  runHistory.push({distance: distance.toFixed(2),calories,speed,date:new Date().toLocaleString()});
-  localStorage.setItem("runHistory", JSON.stringify(runHistory));
-  updateHistory();
-  drawChart();
-}
+    function updateSummary(){
+      const calorieEl = $('calorieVal');
+      const tdee = Number(localStorage._lastTDEE) || Number($('tdeeVal').textContent.replace(/[^\d.-]/g,'')) || 0;
+      // sum meal calories
+      const mealInputs = Array.from(document.querySelectorAll('#mealsContainer input[type=number]'));
+      const mealSum = mealInputs.reduce((s,i)=>s + (Number(i.value)||0),0);
+      const calAfter = (Number(calorieEl.textContent.replace(/[^\d.-]/g,'')) || tdee) - (Number($('runCalories').textContent.replace(/[^\d.-]/g,''))||0);
+      $('calAfterRun').textContent = (calAfter>0?calAfter:0) + ' كيلو سعرة تقريباً';
 
-// تحديث جدول المغذيات
-function updateNutritionTable() {
-  let weight = +document.getElementById("weight").value;
-  if (!weight) return;
-  let protein = Math.round(weight * 1.5);
-  let carbs = Math.round(weight * 4);
-  let fat = Math.round(weight * 0.9);
+      // update nutrition values based on chosen calorie target
+      const caloriesTarget = Number($('calorieVal').textContent.replace(/[^\d.-]/g,'')) || tdee || 2000;
+      const weight = Number($('weight').value) || 70;
+      const goal = $('goal').value;
+      const nut = nutritionSplit(caloriesTarget, weight, goal);
+      $('proteinVal').textContent = nut.proteinG + ' غ';
+      $('carbVal').textContent = nut.carbsG + ' غ';
+      $('fatVal').textContent = nut.fatG + ' غ';
 
-  document.getElementById("proteinRec").innerText = protein;
-  document.getElementById("carbRec").innerText = carbs;
-  document.getElementById("fatRec").innerText = fat;
-}
+      // show simple totals of meals
+      // (not map to macros per meal in this simple version)
+    }
 
-// استدعاء التحديث عند تغيير البيانات
-document.getElementById("age").addEventListener("input", updateNutritionTable);
-document.getElementById("weight").addEventListener("input", updateNutritionTable);
-document.getElementById("height").addEventListener("input", updateNutritionTable);
+    // ====== Events ======
+    $('calcBtn').addEventListener('click',()=>{
+      const age = Number($('age').value), weight=Number($('weight').value), height=Number($('height').value);
+      const sex = $('sex').value; const activity = Number($('activity').value); const goal = $('goal').value;
+      const bmr = calcBMR(sex,weight,height,age); const tdee = calcTDEE(bmr,activity);
+      const adj = adjustForGoal(tdee,goal);
+      $('bmrVal').textContent = Math.round(bmr) + ' kcal';
+      $('tdeeVal').textContent = Math.round(tdee) + ' kcal';
+      $('calorieVal').textContent = Math.round(adj) + '';
+      localStorage._lastTDEE = Math.round(tdee);
+      updateSummary();
+    });
 
-function updateHistory(){
-  let html="";
-  runHistory.forEach(e=>{
-    html+=`<p>🏃 مسافة: <b>${e.distance} كم</b> — 🔥 سعرات: <b>${e.calories}</b> — ⚡ سرعة: <b>${e.speed}</b> — 📅 ${e.date}</p><hr>`;
-  });
-  document.getElementById("historyBox").innerHTML = html;
-}
+    $('calcRun').addEventListener('click',()=>{
+      const weight = Number($('weight').value)||70; const distance = Number($('runDistance').value)||0;
+      const est = estimateRunCalories(weight,distance);
+      $('runCalories').textContent = est + '';
+      updateSummary();
+    });
 
-function drawChart(){
-  let ctx = document.getElementById("chart");
-  if(chart) chart.destroy();
-  chart = new Chart(ctx,{
-    type:"line",
-    data:{
-      labels:runHistory.map(e=>e.date),
-      datasets:[
-        {label:"المسافة (كم)",data:runHistory.map(e=>e.distance),borderColor:"#0a7cff",backgroundColor:"rgba(10,124,255,0.2)",borderWidth:3,fill:true},
-        {label:"السعرات",data:runHistory.map(e=>e.calories),borderColor:"#ffbb00",backgroundColor:"rgba(255,187,0,0.2)",borderWidth:3,fill:true},
-        {label:"السرعة (كم/س)",data:runHistory.map(e=>e.speed),borderColor:"#00c6ff",backgroundColor:"rgba(0,198,255,0.2)",borderWidth:3,fill:true}
-      ]
-    },
-    options:{scales:{y:{beginAtZero:true}}}
-  });
-}
+    $('addMeal').addEventListener('click',()=>addMealNode());
+    $('autoFillMeals').addEventListener('click',()=>autoFillMeals());
 
-updateHistory();
-drawChart();
-</script>
+    $('saveProfile').addEventListener('click',()=>{
+      const profile = {
+        age: Number($('age').value), weight: Number($('weight').value), height: Number($('height').value), sex: $('sex').value,
+        activity: $('activity').value, goal: $('goal').value,
+        meals: Array.from(document.querySelectorAll('#mealsContainer .meal')).map(m=>({food: m.querySelector('select').value, kcal: Number(m.querySelector('input').value)||0}))
+      };
+      localStorage.setItem('rafiqi_profile', JSON.stringify(profile));
+      alert('تم الحفظ محليًا في المستعرض. يمكنك استعادة البيانات لاحقًا بنفس المتصفح.');
+    });
+
+    $('resetBtn').addEventListener('click',()=>{
+      if(confirm('هل تريد إعادة ضبط جميع الحقول إلى القيم الافتراضية؟')){
+        $('age').value=30; $('weight').value=70; $('height').value=175; $('sex').value='male'; $('activity').value='1.55'; $('goal').value='maintain';
+        $('runDistance').value=5; $('runSpeed').value='';
+        populateMealsDefault(); $('bmrVal').textContent='—'; $('tdeeVal').textContent='—'; $('calorieVal').textContent='—'; $('runCalories').textContent='—'; $('calAfterRun').textContent='—'; $('proteinVal').textContent='—'; $('carbVal').textContent='—'; $('fatVal').textContent='—';
+      }
+    });
+
+    // Load saved profile on init
+    window.addEventListener('load',()=>{
+      populateMealsDefault();
+      const saved = localStorage.getItem('rafiqi_profile');
+      if(saved){
+        try{
+          const p = JSON.parse(saved);
+          $('age').value = p.age || 30; $('weight').value = p.weight || 70; $('height').value = p.height || 175; $('sex').value = p.sex || 'male'; $('activity').value = p.activity || '1.55'; $('goal').value = p.goal || 'maintain';
+          // restore meals
+          if(p.meals && p.meals.length){ $('mealsContainer').innerHTML=''; p.meals.forEach(m=>addMealNode(m.food));
+            // set kcal for each
+            const inputs = document.querySelectorAll('#mealsContainer input[type=number]'); p.meals.forEach((m,i)=>{ if(inputs[i]) inputs[i].value = m.kcal || inputs[i].value });
+          }
+          // calc automatically
+          $('calcBtn').click();
+        }catch(e){console.warn('failed to load profile',e)}
+      }
+
+      // small initial run to show defaults
+      updateSummary();
+    });
+
+    // Accessibility: keyboard shortcut S to save
+    window.addEventListener('keydown',(e)=>{ if(e.key.toLowerCase()==='s' && (e.ctrlKey||e.metaKey)){ e.preventDefault(); $('saveProfile').click(); } })
+
+  </script>
 </body>
 </html>
