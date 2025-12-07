@@ -35,12 +35,12 @@
 <header class="hero">
  <div class="hero-content">
    <h1>أفضل حاسبة للجري و الحمية</h1>
-   <p>احسب نشاطك واحصل على وجبات للوصول لهدفك من السعرات.</p>
+   <p>احسب نشاطك واحصل على وجبات للوصول لهدفك من السعرات والمغذيات.</p>
    <a href="#calc" class="btn">ابدأ الآن</a>
  </div>
 </header>
 <div class="container" id="calc">
- <h2>حاسبة الجري + نظام الوجبات</h2>
+ <h2>حاسبة الجري + نظام الوجبات والمغذيات</h2>
  <label>العمر:</label><input type="number" id="age" />
  <label>الوزن (كغ):</label><input type="number" id="weight" />
  <label>الطول (سم):</label><input type="number" id="height" />
@@ -54,12 +54,12 @@
 
  <label>اختر وجباتك لليوم:</label>
  <select id="mealPlan" multiple size="6">
-   <option value="350">فطور: شوفان + موز + حليب (350 سعرة)</option>
-   <option value="500">غداء: دجاج مشوي + أرز (500 سعرة)</option>
-   <option value="450">غداء: سمك + سلطة (450 سعرة)</option>
-   <option value="300">عشاء: تونة + خبز كامل (300 سعرة)</option>
-   <option value="200">سناك: لوز + تفاحة (200 سعرة)</option>
-   <option value="150">سناك: زبادي (150 سعرة)</option>
+   <option value="350" data-protein="15" data-carb="45" data-fat="10">فطور: شوفان + موز + حليب (350 سعرة)</option>
+   <option value="500" data-protein="35" data-carb="50" data-fat="12">غداء: دجاج مشوي + أرز (500 سعرة)</option>
+   <option value="450" data-protein="30" data-carb="40" data-fat="15">غداء: سمك + سلطة (450 سعرة)</option>
+   <option value="300" data-protein="25" data-carb="20" data-fat="8">عشاء: تونة + خبز كامل (300 سعرة)</option>
+   <option value="200" data-protein="6" data-carb="25" data-fat="10">سناك: لوز + تفاحة (200 سعرة)</option>
+   <option value="150" data-protein="8" data-carb="12" data-fat="5">سناك: زبادي (150 سعرة)</option>
  </select>
 
  <button onclick="calculate()">احسب الآن</button>
@@ -83,7 +83,8 @@ function calculate() {
  let height = +document.getElementById("height").value;
  let calories = +document.getElementById("cal").value;
  let speed = +document.getElementById("speed").value;
- let meals = Array.from(document.getElementById("mealPlan").selectedOptions).map(o=>+o.value);
+ let mealsOpts = Array.from(document.getElementById("mealPlan").selectedOptions);
+ let meals = mealsOpts.map(o => +o.value);
 
  if (!age || !weight || !height || !calories || !speed) {
    document.getElementById("result").innerHTML = "⚠ الرجاء ملء كل البيانات.";
@@ -95,7 +96,10 @@ function calculate() {
  let timeMinutes = (distance / speed) * 60;
  let vo2 = (speed * 3.5).toFixed(1);
 
- // meals
+ // حساب المغذيات
+ let totalProtein = mealsOpts.reduce((a,o)=>a+Number(o.dataset.protein),0);
+ let totalCarb = mealsOpts.reduce((a,o)=>a+Number(o.dataset.carb),0);
+ let totalFat = mealsOpts.reduce((a,o)=>a+Number(o.dataset.fat),0);
  let mealsTotal = meals.reduce((a,b)=>a+b,0);
  let remaining = calories - mealsTotal;
 
@@ -104,7 +108,10 @@ function calculate() {
    ✔ الزمن المطلوب: <b>${timeMinutes.toFixed(1)} دقيقة</b><br>
    ✔ الـ Pace: <b>${pace.toFixed(2)} دقيقة/كم</b><br>
    ✔ VO₂ Max: <b>${vo2}</b><br>
-   ✔ مجموع سعرات وجباتك: <b>${mealsTotal}</b>
+   ✔ مجموع السعرات وجباتك: <b>${mealsTotal}</b><br>
+   ✔ البروتين الكلي: <b>${totalProtein} غ</b><br>
+   ✔ الكربوهيدرات الكلية: <b>${totalCarb} غ</b><br>
+   ✔ الدهون الكلية: <b>${totalFat} غ</b>
  `;
 
  document.getElementById("mealResult").innerHTML = remaining > 0
