@@ -69,6 +69,7 @@ body.dark .admin-log { background:#333; color:#fff; }
   <h2>تسجيل/تسجيل الدخول للمصمم</h2>
   <div class="form-box">
     <input id="designerEmail" type="email" placeholder="البريد الإلكتروني">
+    <input id="designerPass" type="password" placeholder="كلمة المرور">
     <button onclick="verifyDesigner()">التحقق/إنشاء حساب</button>
   </div>
 </section>
@@ -77,6 +78,9 @@ body.dark .admin-log { background:#333; color:#fff; }
 <section id="designerPage">
   <h2>صفحتك الشخصية</h2>
   <div class="user-info" id="userInfo"></div>
+  <div class="user-info">
+    <strong>إجمالي المشترين:</strong> <span id="totalSales">0</span>
+  </div>
 
   <h3>إضافة تصميم جديد</h3>
   <div class="form-box">
@@ -93,10 +97,6 @@ body.dark .admin-log { background:#333; color:#fff; }
 
   <h3>تصاميمك:</h3>
   <div class="designs-container" id="designerDesigns"></div>
-
-  <div class="user-info">
-    <strong>عدد المشترين / المبيعات:</strong> <span id="salesCount">0</span>
-  </div>
 </section>
 
 <!-- BUYER ACCESS -->
@@ -124,14 +124,19 @@ function showSection(id){
 // ----- Verify / Create Designer -----
 function verifyDesigner(){
   const email = document.getElementById("designerEmail").value;
-  if(!email){ alert("أدخل البريد الإلكتروني"); return; }
+  const pass = document.getElementById("designerPass").value;
+  if(!email || !pass){ alert("أكمل البريد الإلكتروني وكلمة المرور"); return; }
 
   let designerData = JSON.parse(localStorage.getItem("designerData")) || {};
   if(!designerData.email || designerData.email !== email){
     // إنشاء حساب جديد
-    designerData = { email: email, designs: [], sales: 0 };
+    designerData = { email: email, pass: pass, designs: [], totalSales: 0 };
     localStorage.setItem("designerData", JSON.stringify(designerData));
+  } else {
+    // تحقق كلمة المرور
+    if(designerData.pass !== pass){ alert("كلمة المرور غير صحيحة"); return; }
   }
+
   loadDesignerPage();
   showSection("designerPage");
 }
@@ -141,12 +146,12 @@ function loadDesignerPage(){
   const data = JSON.parse(localStorage.getItem("designerData"));
   if(data){
     document.getElementById("userInfo").innerHTML = `<strong>البريد الإلكتروني:</strong> ${data.email}`;
-    document.getElementById("salesCount").innerText = data.sales || 0;
+    document.getElementById("totalSales").innerText = data.totalSales || 0;
 
     const container = document.getElementById("designerDesigns");
     container.innerHTML = "";
     data.designs.forEach(d=>{
-      container.innerHTML += `<div class="design-card">${d.name}<br>${d.price} ${d.currency}<br><button onclick="buyDesign('${d.name}','${d.price}','${d.currency}')">اشترِ الآن</button></div>`;
+      container.innerHTML += `<div class="design-card">${d.name}<br>${d.price} ${d.currency}<br>عدد المشترين: ${d.buyers || 0}<br><button onclick="buyDesign('${d.name}','${d.price}','${d.currency}')">اشترِ الآن</button></div>`;
     });
 
     loadMainDesigns();
@@ -164,7 +169,7 @@ function addDesign(){
   if(!name || !price){ alert("أكمل البيانات"); return; }
 
   const data = JSON.parse(localStorage.getItem("designerData"));
-  data.designs.push({name, image, price, currency});
+  data.designs.push({name, image, price, currency, buyers:0});
   localStorage.setItem("designerData", JSON.stringify(data));
 
   loadDesignerPage();
@@ -177,7 +182,7 @@ function loadMainDesigns(){
   container.innerHTML = "";
   if(data){
     data.designs.forEach(d=>{
-      container.innerHTML += `<div class="design-card">${d.name}<br>${d.price} ${d.currency}<br><button onclick="buyDesign('${d.name}','${d.price}','${d.currency}')">اشترِ الآن</button></div>`;
+      container.innerHTML += `<div class="design-card">${d.name}<br>${d.price} ${d.currency}<br>عدد المشترين: ${d.buyers || 0}<br><button onclick="buyDesign('${d.name}','${d.price}','${d.currency}')">اشترِ الآن</button></div>`;
     });
   }
 }
@@ -188,10 +193,14 @@ function buyDesign(name, price, currency){
   sales.push({design:name, price:price, currency:currency, date:new Date().toLocaleString()});
   localStorage.setItem("salesLog", JSON.stringify(sales));
 
-  // تحديث عدد المشترين
-  const designerData = JSON.parse(localStorage.getItem("designerData"));
-  designerData.sales = (designerData.sales || 0) + 1;
-  localStorage.setItem("designerData", JSON.stringify(designerData));
+  // تحديث المشترين لكل تصميم
+  const data = JSON.parse(localStorage.getItem("designerData"));
+  data.totalSales = (data.totalSales || 0) + 1;
+  data.designs = data.designs.map(d=>{
+    if(d.name === name){ d.buyers = (d.buyers || 0) + 1; }
+    return d;
+  });
+  localStorage.setItem("designerData", JSON.stringify(data));
 
   alert(`تم شراء التصميم: ${name} مقابل ${price} ${currency}`);
   loadDesignerPage();
