@@ -9,11 +9,32 @@ body { font-family: Arial,sans-serif; margin:0; padding:0; direction: rtl; trans
 body.light { background:#fff; color:#000; }
 body.dark { background:#121212; color:#fff; }
 
-.nav { background:#000; color:#FFD700; padding:15px 25px; display:flex; justify-content:space-between; align-items:center; }
-.nav button { background:#FFD700; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:bold; margin-left:10px; font-size:18px; }
+/* NAVBAR مصغر */
+.nav { 
+  background:#000; 
+  color:#FFD700; 
+  padding:8px 20px;   /* تقليل ارتفاع الشريط */
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center; 
+}
+.nav-left { display:flex; align-items:center; gap:10px; }
+.nav-right { display:flex; align-items:center; }
+
+.nav button { 
+  background:#FFD700; 
+  border:none; 
+  padding:6px 10px;   /* تقليل حجم الأزرار */
+  border-radius:6px; 
+  cursor:pointer; 
+  font-weight:bold; 
+  margin-left:5px; 
+  font-size:18px; 
+}
 .nav button:hover { background:#FFC107; }
 .nav button[title] { font-size:22px; }
 
+/* SECTIONS */
 section { display:none; padding:30px; }
 section.active { display:block; }
 
@@ -40,13 +61,15 @@ body.dark .purchase-list { background:#333; color:#fff; }
 </head>
 <body class="light">
 
-<!-- NAVBAR مع أيقونات -->
+<!-- NAVBAR مصغر بالأيقونات -->
 <div class="nav">
-  <div style="font-size:22px; font-weight:bold;">Modish Market</div>
-  <div>
+  <div class="nav-left">
+    <div style="font-size:20px; font-weight:bold;">Modish Market</div>
     <button title="الرئيسية" onclick="showSection('home')">🏠</button>
     <button title="المصمم" onclick="showSection('designerLogin')">👤</button>
     <button title="المشتريات" onclick="showSection('purchases')">🛒</button>
+  </div>
+  <div class="nav-right">
     <button title="الوضع الليلي" onclick="toggleTheme()">🌙</button>
   </div>
 </div>
