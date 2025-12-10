@@ -1,15 +1,202 @@
-Modish-Market/
-│
-├─ index.html         ← الصفحة الرئيسية (عرض التصاميم أفقياً)
-├─ checkout.html      ← صفحة الدفع لكل تصميم
-├─ success.html       ← صفحة النجاح بعد الدفع
-├─ admin.html         ← لوحة الإدارة
-│
-├─ css/
-│   └─ style.css      ← كل التنسيقات + الوضع الليلي
-│
-├─ js/
-│   └─ main.js        ← التنقل بين الصفحات + PayPal + الوضع الليلي + حماية الصور
-│
-└─ images/
-    └─ (صور التصاميم مع Watermark)
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modish Market - منصة التصاميم</title>
+<style>
+body { font-family: Arial,sans-serif; margin:0; padding:0; direction: rtl; transition:0.3s; }
+body.light { background:#fff; color:#000; }
+body.dark { background:#121212; color:#fff; }
+
+/* NAVBAR */
+.nav { background:#000; color:#FFD700; padding:15px 25px; display:flex; justify-content:space-between; align-items:center; }
+.nav button { background:#FFD700; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:bold; margin-left:10px; }
+.nav button:hover { background:#FFC107; }
+
+/* SECTIONS */
+section { display:none; padding:30px; }
+section.active { display:block; }
+
+/* FORM */
+.form-box { max-width:400px; background:#f2f2f2; padding:20px; border-radius:10px; margin:auto; }
+.form-box input, .form-box input[type=file] { width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #999; }
+.form-box button { width:100%; padding:10px; background:#000; color:#FFD700; border:none; border-radius:8px; cursor:pointer; font-size:16px; }
+
+/* DARK THEME */
+body.dark .form-box { background:#1E1E1E; }
+body.dark .form-box input { background:#333; color:#fff; border-color:#666; }
+body.dark .form-box button { background:#FFD700; color:#000; }
+
+/* USER INFO */
+.user-info { background:#e0e0e0; padding:15px; border-radius:10px; max-width:400px; margin:auto; }
+body.dark .user-info { background:#333; }
+
+/* DESIGN DISPLAY */
+.designs-container { display:flex; overflow-x:auto; gap:20px; padding-bottom:10px; margin-top:20px; }
+.design-card { min-width:200px; background:#f2f2f2; border-radius:10px; padding:10px; text-align:center; flex-shrink:0; }
+.design-card button { margin-top:10px; padding:8px 12px; border:none; border-radius:5px; cursor:pointer; background:#000; color:#FFD700; font-weight:bold; }
+body.dark .design-card { background:#1E1E1E; }
+body.dark .design-card button { background:#FFD700; color:#000; }
+
+/* ADMIN */
+.admin-log { max-width:500px; margin:auto; background:#f2f2f2; padding:15px; border-radius:10px; }
+body.dark .admin-log { background:#333; color:#fff; }
+</style>
+</head>
+<body class="light">
+
+<!-- NAVBAR -->
+<div class="nav">
+  <div style="font-size:22px; font-weight:bold;">Modish Market</div>
+  <div>
+    <button onclick="showSection('home')">الرئيسية</button>
+    <button onclick="showSection('designer')">للمصممين</button>
+    <button onclick="showSection('viewer')">دخول المشتري</button>
+    <button onclick="showSection('admin')">لوحة الإدارة</button>
+    <button onclick="toggleTheme()">🌙</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<section id="home" class="active">
+  <h2>التصاميم المتاحة</h2>
+  <div class="designs-container" id="mainDesigns"></div>
+</section>
+
+<!-- DESIGNER REGISTER -->
+<section id="designer">
+  <h2>تسجيل مصمم جديد</h2>
+  <div class="form-box">
+    <input id="fname" type="text" placeholder="الاسم">
+    <input id="lname" type="text" placeholder="اللقب">
+    <input id="phone" type="text" placeholder="رقم الهاتف">
+    <input id="email" type="email" placeholder="البريد الإلكتروني">
+    <input id="upload" type="file" multiple>
+    <button onclick="registerDesigner()">إنشاء صفحتي وتحميل التصاميم</button>
+  </div>
+</section>
+
+<!-- DESIGNER PAGE -->
+<section id="designerPage">
+  <h2>صفحتك الشخصية</h2>
+  <div class="user-info" id="userInfo"></div>
+  <h3>تصاميمك:</h3>
+  <div class="designs-container" id="designerDesigns"></div>
+</section>
+
+<!-- BUYER ACCESS -->
+<section id="viewer">
+  <h2>دخول المشتري</h2>
+  <p>يمكن للمشتري الولوج مباشرة لمشاهدة كل التصاميم.</p>
+</section>
+
+<!-- ADMIN -->
+<section id="admin">
+  <h2>لوحة الإدارة</h2>
+  <div class="admin-log" id="salesLog"></div>
+</section>
+
+<script>
+// ----- Theme -----
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
+}
+
+// ----- Show Sections -----
+function showSection(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// ----- Register Designer -----
+function registerDesigner(){
+  const data = {
+    fname: document.getElementById("fname").value,
+    lname: document.getElementById("lname").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    designs: []
+  };
+
+  if(!data.fname || !data.lname || !data.phone || !data.email){
+    alert("يرجى ملء جميع الخانات");
+    return;
+  }
+
+  // Upload files
+  const files = document.getElementById("upload").files;
+  for(let i=0;i<files.length;i++){
+    data.designs.push(files[i].name);
+  }
+
+  // Save designer data
+  localStorage.setItem("designerData", JSON.stringify(data));
+
+  // Load designer page
+  loadDesignerPage();
+  showSection("designerPage");
+
+  // Update main designs (stay on homepage)
+  loadMainDesigns();
+  updateAdmin();
+}
+
+// ----- Load Designer Page -----
+function loadDesignerPage(){
+  const data = JSON.parse(localStorage.getItem("designerData"));
+  if(data){
+    document.getElementById("userInfo").innerHTML = `
+      <strong>الاسم:</strong> ${data.fname} ${data.lname}<br>
+      <strong>رقم الهاتف:</strong> ${data.phone}<br>
+      <strong>البريد الإلكتروني:</strong> ${data.email}<br>
+      <hr>
+    `;
+    const container = document.getElementById("designerDesigns");
+    container.innerHTML = "";
+    data.designs.forEach(d=>{
+      container.innerHTML += `<div class="design-card">${d}<br><button onclick="buyDesign('${d}',10)">اشترِ الآن</button></div>`;
+    });
+  }
+}
+
+// ----- Load Main Designs for Homepage -----
+function loadMainDesigns(){
+  const data = JSON.parse(localStorage.getItem("designerData"));
+  const container = document.getElementById("mainDesigns");
+  container.innerHTML = "";
+  if(data){
+    data.designs.forEach(d=>{
+      container.innerHTML += `<div class="design-card">${d}<br><button onclick="buyDesign('${d}',10)">اشترِ الآن</button></div>`;
+    });
+  }
+}
+
+// ----- Buy Design -----
+function buyDesign(name, price){
+  const sales = JSON.parse(localStorage.getItem("salesLog") || "[]");
+  sales.push({design:name, price:price, date:new Date().toLocaleString()});
+  localStorage.setItem("salesLog", JSON.stringify(sales));
+  alert(`تم شراء التصميم: ${name} مقابل $${price}`);
+  updateAdmin();
+}
+
+// ----- Update Admin -----
+function updateAdmin(){
+  const sales = JSON.parse(localStorage.getItem("salesLog") || "[]");
+  const log = document.getElementById("salesLog");
+  log.innerHTML = "<h3>سجل المبيعات:</h3>";
+  sales.forEach((s,i)=>{
+    log.innerHTML += `${i+1}. ${s.design} - $${s.price} - ${s.date}<br>`;
+  });
+}
+
+// Load designer data on start
+loadDesignerPage();
+loadMainDesigns();
+updateAdmin();
+</script>
+
+</body>
+</html>
