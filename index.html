@@ -10,8 +10,9 @@ body.light { background:#fff; color:#000; }
 body.dark { background:#121212; color:#fff; }
 
 .nav { background:#000; color:#FFD700; padding:15px 25px; display:flex; justify-content:space-between; align-items:center; }
-.nav button { background:#FFD700; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:bold; margin-left:10px; }
+.nav button { background:#FFD700; border:none; padding:8px 14px; border-radius:6px; cursor:pointer; font-weight:bold; margin-left:10px; font-size:18px; }
 .nav button:hover { background:#FFC107; }
+.nav button[title] { font-size:22px; }
 
 section { display:none; padding:30px; }
 section.active { display:block; }
@@ -39,23 +40,24 @@ body.dark .purchase-list { background:#333; color:#fff; }
 </head>
 <body class="light">
 
+<!-- NAVBAR مع أيقونات -->
 <div class="nav">
   <div style="font-size:22px; font-weight:bold;">Modish Market</div>
   <div>
-    <button onclick="showSection('home')">الرئيسية</button>
-    <button onclick="showSection('designerLogin')">للمصممين</button>
-    <button onclick="showSection('purchases')">المشتريات</button>
-    <button onclick="toggleTheme()">🌙</button>
+    <button title="الرئيسية" onclick="showSection('home')">🏠</button>
+    <button title="المصمم" onclick="showSection('designerLogin')">👤</button>
+    <button title="المشتريات" onclick="showSection('purchases')">🛒</button>
+    <button title="الوضع الليلي" onclick="toggleTheme()">🌙</button>
   </div>
 </div>
 
-<!-- HOME -->
+<!-- الصفحة الرئيسية -->
 <section id="home" class="active">
   <h2>التصاميم المتاحة</h2>
   <div class="designs-container" id="mainDesigns"></div>
 </section>
 
-<!-- DESIGNER LOGIN / REGISTER -->
+<!-- صفحة تسجيل/تسجيل دخول المصمم -->
 <section id="designerLogin">
   <h2>للمصممين</h2>
   <div class="form-box">
@@ -66,7 +68,7 @@ body.dark .purchase-list { background:#333; color:#fff; }
   </div>
 </section>
 
-<!-- DESIGNER PAGE -->
+<!-- صفحة المصمم -->
 <section id="designerPage">
   <h2>صفحتك الشخصية</h2>
   <div class="user-info" id="userInfo"></div>
@@ -91,7 +93,7 @@ body.dark .purchase-list { background:#333; color:#fff; }
   <div class="designs-container" id="designerDesigns"></div>
 </section>
 
-<!-- PURCHASES -->
+<!-- صفحة المشتريات -->
 <section id="purchases">
   <h2>المشتريات</h2>
   <div class="purchase-list" id="purchaseList"></div>
@@ -154,7 +156,7 @@ function loadDesignerPage(){
   }
 }
 
-// إضافة تصميم
+// إضافة تصميم جديد
 function addDesign(){
   const name = document.getElementById("designName").value;
   const image = document.getElementById("designImage").files[0] ? document.getElementById("designImage").files[0].name : "صورة.png";
